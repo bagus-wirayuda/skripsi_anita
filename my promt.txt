@@ -1,0 +1,204 @@
+pada role orangtua perbaiki bagian bagian berikut :
+- bagian dashbord tombol pesan guru hilangkan saja
+- menu sidebar notes ganti jadi pesan guru
+- bagian data anak icon cetak data ganti jadi cetak kartu siswa ( sesuikan cetak kartu seperti seharusnya)
+- pada bagian perkembangan icon cetak laporan buat berfungsi dengan baik dan benar untuk meghasilkan document yang sesuai
+- pada bagian notes ( akan di ganti jadi pesan guru ) hapus tombol filter
+document hanya boleh dengan pdf seperti module yang sudah di instal
+pastikan seluruh halaman hanya memuat data sesuai yang ada di database tidak boleh ada data dumy ( data yang di tulis di code langsung) 
+jika halaman memiliki sesuatu yang tidak ada di dalam database harap sesuikan seeder agar saya dapat mereset databasenya jika semua ada dan tersedia biarkan saja dan jangan rusak
+
+
+pada role admin harap sesuikan beberapa bagian berikut 
+
+sidebar 
+data siswa ubah jadi siswa
+data guru ubah jadi guru
+data nilai ubah jadi nilai
+absensi siswa ubah jadi presensi
+data user ubah jadi user
+
+tambahkan menu baru yaitu pendaftaran 
+dalam code ini pada halaman publick orang tua akan mendaftar terlebih dahulu setelah pendaftaran 
+user akan di arahkan untuk registrasi secara offline 
+dalam halaman admin/pendaftara akan ada data orang tua yang mendaftar (sebelumnya daftar lewat halaman publick  ) kemudian ada pilihan untuk di setujui, tolak dan hapus
+jika di setuju maka admin di minta untuk memasukan identitas anak ( sesuai yang di butuhkan database ) jika data anak sudah di isi maka otomatis role orang tua akan langsung memiliki data di tabel user ( akun untuk login )
+
+
+pada data anak tidak perlu ada email anak ( jika database meminta maka isi email orang tua)
+pada data anak tidak perlu ada nomor hp ( jika database meminta maka isi dengan nomor telfon orang tua)
+menu pendaftaran pada sidebar pindahkan ke atas tepat di bawah dashbord
+
+ketika penambahan data anak ( siswa ) oleh admin tidak perlu di tambahkan ke tabel user ( karna siswa tidak login yang login hanyalah orang tuanya )
+kemudian sebaiknya sesuaikan pada tabel siswa agar memiliki kolom nama_siswa (sesuikan pada seeder dan migration saya akan menjalankanya ulang)
+
+logika sederhananya seperti ini 
+orang tua mendaftarkan diri ke sistem => admin memeriksa data orang tua ( menentukan status) =>jika di setujui maka admin akan menginput data anak( siswa) => akun orang tua akan siap di gunakan dan di dalamnya sudah ada data anak
+
+saya sudah mecoba simulasi 
+orang tua mendaftarkan diri ke sistem => admin memeriksa data orang tua ( menentukan status) =>menyetujui dan  menginput data anak( siswa) => login dengan akun orang tua yang sudah di buat
+namun orantua baru tersebut tidak bisa login dan muncul pesan eror Call to undefined relationship [user] on model [App\Models\Siswa]. sepertinya ini karena data anak tersebut baru hanya terdaftar di tabel siswa 
+harap sesuikan untuk mengatasi eror ini
+jika baru di gunakan memang banyak data masih kosong 
+
+
+
+data anak tambahkan foto 
+orang tua yang akan menambahkan foto
+
+
+pada halaman admin tambahkan dan sesuikan hal hal berikut ini
+
+tambahkan menu management kelas bernama "Kelas" 
+dalam bagian ini admin dapat menambah jumlah kelas kemudian dapat menentukan wali kelasnya 
+megisi urutan kelas misal 1 - 6 
+mengisi rombel atau bagian kelas misal A B 
+mengisi wali kelasnya 
+opsional mengisi catatan tentang kelas ini 
+
+tambahkan menu management mata pelajara bernama "Mapel"
+dalam bagian ini admin akan mengatur mata pelajaran untuk kelas mana saja 
+admin akan mengatur jadwal guru di mata pelajaran apa saja
+
+seluruh bagian ini harus saling terhubung dengan role dan bagian lain dalam codebase ini agar tetap sincron satu sama lain 
+dan tentunya ini juga harus terhubung dengan database yang sudah ada pastikan bekerja dengan baik dan terhubung satu sama lain
+
+
+pada bagian create mapel sesuaikan bagian bagian berikut 
+rapikan tampilan input dan dropdownya
+jam perminggu ganti saja menjadi jadwal harian biasa setiap hari senin jam 09:00 - 10:00 
+jadi admin di minta memasukan hari kemudian jam 
+
+pada halaman admin sesuikan halaman guru( data guru ) sebagai berikut
+buat tombol dambah guru berfungsi dengan baik 
+pada daftar guru sesuikan agar pada kolom data mata pelajaran dan kelas binaan jika kosong atau belum di atur maka bagian tersebut akan berisi tombol klik untuk mengisi
+untuk kelas binaan maka akandi arahkan ke halaman kelas 
+untuk mata pelajaran akan di arahkan ke halman mapel 
+
+tambahan 
+bentuk logika seperti ini 
+kelas binaan itu sama dengan wali kelas jadi guru bisa memiliki atau tidak memiliki kelas binaan 
+pada bagian create mapel pemilihan guru itu bukan untuk memilih wali kelas melainkan memilih guru pengajar saja 
+kelas binaan atau wali kelas hanya dapat di tentukan melalui menu kelas 
+
+
+pada bagian create kelas sesuikan beberapa bagian berikut 
+perbaiki desainya agar lebih bagus 
+hilangkan urutan kelas karna itu sama saja dengan tinkatan kelas 
+Nama Wali Kelas (Text) - Opsional ganti jadi panggilan guru
+nama kelas hilangkan saja karna jika sudah memilih tingkat kelas dan rombel maka akan otomatis menjadi tingkat + rombel misal kelas 1A
+
+pada halaman admin tepatnya pada menu siswa (data-siswa) sesuikan sebagai berikut 
+buat tambah siswa berfungsi pada bagian ini halaman akan di buat menjadi 3 halaman berkelanjutan
+jika user menklik tambah siswa maka akan muncul halaman himbawan dulu agar mengarhkan orang tua registrasi mandiri dengan mengakses halam register atau pindahan kemudian ada pilihan kembali dan daftarkan manual 
+jika pilih daftar manual makaseluruh tindakan dan proses pendaftaran yang tadinya di lalukan oleh 2 user maka sekarang akan di lakukan admin saja 
+halaman selanjutnya isi data orang tua sesuai yang di butuhkan dan seperti yang di minta pada halaman register orang tua pada role publik
+selajutnya halaman pengisian data siswa prosesnya sama saat mengisi data siswa pada halaman pendfatara pada halaman admin
+
+pada halaman siswa pada daftar siswa terdaftar tambahkan satu kolom lagi yaitu orang tua akan berisi nama orang tua kemudian nama tersebut bisa di klik dan akan mengarahkan ke halaman orang tua dari anak tersebut
+
+
+buatkan juga detail siswa 
+ubah kolom status menjadi kolom action kemudian di dalamnya ada icon detail icon edit dan icon hapus 
+detail akan berisi informasi siswa 
+kemudian edit dan hapus berarti berisi edit dan hapus buatkan halaman masing masing untuk tindakan ini
+untuk hapus pastikan untuk memperingati user kemudian tindakan ini juga akan menghapus seluruh data terkait siswa tersebut ada nilai prensi dan lainya tapi jangan hapus orangtuanya 
+
+pada halaman admin sesuikan tampilan berikut ini 
+ubah urutan sidebar menjadi seperti ini 
+
+dashboard
+pendaftaran
+presensi
+guru
+siswa
+kelas
+mapel
+nilai
+presensi
+user
+laporan ( ganti laporan presensi )
+
+hapus menu jadwal pelajaran
+
+
+pada role admin pada menu dashbord sesuikan agar infrormasi singkatnya lebih di perbanyak lagi sebagaimana layaknya dashbord admin
+baca seluruh codebase admin dan sesuikan mana mana yang perlu di tampilkan 
+kemudian pada bagian teratas tambahkan semua pintasan sidebar ke dalam dashbord 
+serta hilangkan tombol unduh ringkasa
+
+
+
+pada role guru 
+pebaiki dan sesuikan semua halaman agar tidak eror 
+baca codebase pada admin pelajari dan buat penyesuaian terhadap halaman guru agar lebih sesuai dengan logika yang ada pada admin
+
+dalam role guru tambahkan 
+yang pertama kelas saya
+pada bagian kelas saya ini akan berisi jadwal mengajar 
+pelajari pada bagian admin pada bagian mapel untuk menerapkan fitur yang sesuai 
+akan ada jadwal terdekat yang di tampilkan kemudian akan berisi mata pelajaran apa kelas mana dan dan jadwalnya kapan
+kemudian ada fitur 
+
+yang kedua perwalian
+pada halaman ini lebih tepatnya berisi management dan informasi tentang siswa pada perwalianya 
+pada bagian ini akan ada informasi siswa pada kelas tersebut kemudian jadwal mata pelajaran pada kelas tersebut selama seminggu 
+data siswa yang ada pada kelas tersebut ( bisa tiru pada halaman admin/siswa ) namun tentunya di filter agar hanya menampilkan siswa pada kelas perwalianya saja
+
+
+dalam role guru fokus pada penilaian harian baca seeder dab migration untuk menyesuikan apa apa saja yang perlu di input serta sesuikan tampilanya
+
+dalam role orangtua tambahkan menu penilaian harian ini harus sesuai dengan yang ada di dalamdatabase sesuai dengan yang di buat sebelumnya pada role guru pada halaman penilaian harian 
+
+role guru 
+pada penilaian harian buat agar bisa di buat untuk 1 siswa dan tidak harus semua siswa sekaligus agar mempermudah penilian sendiri sendiri
+jadi guru akan memilih siswanya terlebih dahulu baru mengisi form penilaian jadi tidak perlu menampilkan semua data siswa
+
+
+
+
+
+
+kerjaan selanjutnya 
+
+fitur notes
+fitur tambah anak 
+simulasi apalikasi lama 
+simulasi aplikasi baru
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

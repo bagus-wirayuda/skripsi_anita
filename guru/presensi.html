@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SDN 1 UNDUOLO - Presensi Guru</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+      integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link rel="stylesheet" href="../assets/css/style.css" />
+  </head>
+  <body data-page="guru-presensi">
+    <div class="layout">
+      <aside class="sidebar">
+        <div class="sidebar__brand">
+          <img src="../assets/img/logo.png" alt="Logo SDN 1 UNDUOLO" width="40" height="40" />
+          <span>SDN 1 UNDUOLO</span>
+        </div>
+        <nav class="sidebar__nav">
+          <a class="sidebar__link" href="dashboard.html" data-nav="guru-dashboard">
+            <i class="fa-solid fa-house"></i>
+            <span>Dashboard</span>
+          </a>
+          <a class="sidebar__link" href="presensi.html" data-nav="guru-presensi">
+            <i class="fa-solid fa-clipboard-check"></i>
+            <span>Presensi</span>
+          </a>
+          <a class="sidebar__link" href="nilai.html" data-nav="guru-nilai">
+            <i class="fa-solid fa-star"></i>
+            <span>Nilai</span>
+          </a>
+          <a class="sidebar__link" href="notes.html" data-nav="guru-notes">
+            <i class="fa-solid fa-note-sticky"></i>
+            <span>Notes</span>
+          </a>
+          <a class="sidebar__link" href="laporan.html" data-nav="guru-laporan">
+            <i class="fa-solid fa-chart-bar"></i>
+            <span>Laporan</span>
+          </a>
+          <a class="sidebar__link" href="penilaian-harian.html" data-nav="guru-penilaian-harian">
+            <i class="fa-solid fa-star-half-stroke"></i>
+            <span>Penilaian Harian</span>
+          </a>
+        </nav>
+      </aside>
+
+      <main class="layout__main">
+        <header class="page-header">
+          <h1>Presensi Kelas 5A</h1>
+          <button class="btn" type="button">
+            <i class="fa-solid fa-rotate" aria-hidden="true"></i>
+            <span>Sinkronkan</span>
+          </button>
+        </header>
+
+        <section aria-labelledby="detail-kelas">
+          <h2 id="detail-kelas" class="section-title">Daftar Siswa</h2>
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>Nama</th>
+                  <th>NIS</th>
+                  <th>Hadir</th>
+                  <th>Izin</th>
+                  <th>Sakit</th>
+                  <th>Alpa</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Andi Prakoso</td>
+                  <td>192301</td>
+                  <td>
+                    <input type="radio" name="presensi_192301" value="hadir" id="presensi_192301_hadir" class="presensi-radio" checked />
+                    <label for="presensi_192301_hadir"></label>
+                  </td>
+                  <td>
+                    <input type="radio" name="presensi_192301" value="izin" id="presensi_192301_izin" class="presensi-radio" />
+                    <label for="presensi_192301_izin"></label>
+                  </td>
+                  <td>
+                    <input type="radio" name="presensi_192301" value="sakit" id="presensi_192301_sakit" class="presensi-radio" />
+                    <label for="presensi_192301_sakit"></label>
+                  </td>
+                  <td>
+                    <input type="radio" name="presensi_192301" value="alpa" id="presensi_192301_alpa" class="presensi-radio" />
+                    <label for="presensi_192301_alpa"></label>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Bella Lestari</td>
+                  <td>192302</td>
+                  <td>
+                    <input type="radio" name="presensi_192302" value="hadir" id="presensi_192302_hadir" class="presensi-radio" />
+                    <label for="presensi_192302_hadir"></label>
+                  </td>
+                  <td>
+                    <input type="radio" name="presensi_192302" value="izin" id="presensi_192302_izin" class="presensi-radio" checked />
+                    <label for="presensi_192302_izin"></label>
+                  </td>
+                  <td>
+                    <input type="radio" name="presensi_192302" value="sakit" id="presensi_192302_sakit" class="presensi-radio" />
+                    <label for="presensi_192302_sakit"></label>
+                  </td>
+                  <td>
+                    <input type="radio" name="presensi_192302" value="alpa" id="presensi_192302_alpa" class="presensi-radio" />
+                    <label for="presensi_192302_alpa"></label>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Chandra Wijaya</td>
+                  <td>192303</td>
+                  <td>
+                    <input type="radio" name="presensi_192303" value="hadir" id="presensi_192303_hadir" class="presensi-radio" />
+                    <label for="presensi_192303_hadir"></label>
+                  </td>
+                  <td>
+                    <input type="radio" name="presensi_192303" value="izin" id="presensi_192303_izin" class="presensi-radio" />
+                    <label for="presensi_192303_izin"></label>
+                  </td>
+                  <td>
+                    <input type="radio" name="presensi_192303" value="sakit" id="presensi_192303_sakit" class="presensi-radio" />
+                    <label for="presensi_192303_sakit"></label>
+                  </td>
+                  <td>
+                    <input type="radio" name="presensi_192303" value="alpa" id="presensi_192303_alpa" class="presensi-radio" checked />
+                    <label for="presensi_192303_alpa"></label>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Dewi Anggraini</td>
+                  <td>192304</td>
+                  <td>
+                    <input type="radio" name="presensi_192304" value="hadir" id="presensi_192304_hadir" class="presensi-radio" checked />
+                    <label for="presensi_192304_hadir"></label>
+                  </td>
+                  <td>
+                    <input type="radio" name="presensi_192304" value="izin" id="presensi_192304_izin" class="presensi-radio" />
+                    <label for="presensi_192304_izin"></label>
+                  </td>
+                  <td>
+                    <input type="radio" name="presensi_192304" value="sakit" id="presensi_192304_sakit" class="presensi-radio" />
+                    <label for="presensi_192304_sakit"></label>
+                  </td>
+                  <td>
+                    <input type="radio" name="presensi_192304" value="alpa" id="presensi_192304_alpa" class="presensi-radio" />
+                    <label for="presensi_192304_alpa"></label>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Eko Pratama</td>
+                  <td>192305</td>
+                  <td>
+                    <input type="radio" name="presensi_192305" value="hadir" id="presensi_192305_hadir" class="presensi-radio" />
+                    <label for="presensi_192305_hadir"></label>
+                  </td>
+                  <td>
+                    <input type="radio" name="presensi_192305" value="izin" id="presensi_192305_izin" class="presensi-radio" />
+                    <label for="presensi_192305_izin"></label>
+                  </td>
+                  <td>
+                    <input type="radio" name="presensi_192305" value="sakit" id="presensi_192305_sakit" class="presensi-radio" checked />
+                    <label for="presensi_192305_sakit"></label>
+                  </td>
+                  <td>
+                    <input type="radio" name="presensi_192305" value="alpa" id="presensi_192305_alpa" class="presensi-radio" />
+                    <label for="presensi_192305_alpa"></label>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div style="margin-top: 24px;">
+            <button class="btn" type="button" id="savePresensi">
+              <i class="fa-solid fa-floppy-disk" aria-hidden="true"></i>
+              <span>Simpan Presensi</span>
+            </button>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="../assets/js/script.js"></script>
+  </body>
+</html>
+
+
