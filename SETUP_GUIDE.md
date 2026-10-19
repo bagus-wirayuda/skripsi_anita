@@ -1,3 +1,14 @@
+# Pembaruan setup
+
+Untuk database yang sudah berisi data, jalankan `php scripts/migrate.php`.
+Jangan impor ulang `database.sql` ke database yang sedang digunakan.
+Gunakan PHP 8.1+ dengan extension mysqli, mbstring dan zip.
+
+Panduan terbaru: [Audit dan Penggunaan](docs/AUDIT_DAN_PENGGUNAAN.md).
+WhatsApp: [Integrasi ditangguhkan](docs/WHATSAPP_INTEGRATION.md).
+
+---
+
 # Panduan Setup Sistem Manajemen Sekolah SDN 1 UNDUOLO
 
 ## Yang Sudah Diselesaikan

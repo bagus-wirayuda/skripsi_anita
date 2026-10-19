@@ -28,12 +28,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['username']) && isset(
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>SDN 1 UNDUOLO - Login Sistem</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
-      integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+      href="assets/vendor/fontawesome/css/all.min.css"
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     />
@@ -64,14 +61,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['username']) && isset(
         <?php endif; ?>
 
         <!-- Login Form -->
-        <form id="loginForm" method="POST" action="">
+        <form id="loginForm" method="POST" action=""><input type="hidden" name="csrf" value="<?=htmlspecialchars($_SESSION['csrf'])?>">
           <div class="form-group">
-            <label for="username"><i class="fa-solid fa-user"></i> Username</label>
-            <input type="text" id="username" name="username" placeholder="Masukkan username" required />
+            <label for="username"><i class="fa-solid fa-user"></i> Username / Email</label>
+            <input type="text" id="username" name="username" placeholder="Masukkan username atau email" autocomplete="username" required />
           </div>
           <div class="form-group">
             <label for="password"><i class="fa-solid fa-lock"></i> Password</label>
-            <input type="password" id="password" name="password" placeholder="Masukkan password" required />
+            <input type="password" id="password" name="password" placeholder="Masukkan password" autocomplete="current-password" required />
           </div>
           <button class="btn" type="submit">
             <i class="fa-solid fa-right-to-bracket" aria-hidden="true"></i>

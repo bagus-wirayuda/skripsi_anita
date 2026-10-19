@@ -5,30 +5,23 @@
  */
 
 // Konfigurasi Database
-define('DB_HOST', 'localhost');
-define('DB_USER', 'root');
-define('DB_PASS', '');
-define('DB_NAME', 'sdn1unduolo');
+if (is_file(__DIR__ . '/local.php')) require __DIR__ . '/local.php';
+defined('DB_HOST') || define('DB_HOST', getenv('DB_HOST') ?: 'localhost');
+defined('DB_USER') || define('DB_USER', getenv('DB_USER') ?: 'root');
+defined('DB_PASS') || define('DB_PASS', getenv('DB_PASS') ?: '');
+defined('DB_NAME') || define('DB_NAME', getenv('DB_NAME') ?: 'sdn1unduolo');
 
 // Konfigurasi Aplikasi
 define('APP_NAME', 'SDN 1 UNDUOLO');
 
 // Auto-detect BASE_URL
 if (!defined('BASE_URL')) {
-    $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
-    $host = $_SERVER['HTTP_HOST'];
-    $script = $_SERVER['SCRIPT_NAME'];
-    // Get base path from document root
-    $docRoot = $_SERVER['DOCUMENT_ROOT'];
-    $scriptFile = $_SERVER['SCRIPT_FILENAME'];
-    $basePath = str_replace('\\', '/', str_replace($docRoot, '', dirname($scriptFile)));
-    $basePath = rtrim($basePath, '/');
-    // If empty, use script directory
-    if (empty($basePath)) {
-        $basePath = dirname($script);
-        $basePath = rtrim($basePath, '/');
-    }
-    define('BASE_URL', $protocol . '://' . $host . $basePath);
+    $script = str_replace('\\', '/', $_SERVER['SCRIPT_NAME'] ?? '');
+    $file = str_replace('\\', '/', $_SERVER['SCRIPT_FILENAME'] ?? '');
+    $root = str_replace('\\', '/', dirname(__DIR__));
+    $relative = substr($file, strlen($root));
+    $basePath = $relative && str_ends_with($script, $relative) ? substr($script, 0, -strlen($relative)) : '';
+    define('BASE_URL', rtrim(getenv('APP_BASE_URL') ?: $basePath, '/'));
 }
 
 // Timezone
@@ -42,6 +35,7 @@ function getDB() {
     
     if ($conn === null) {
         try {
+            mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
             $conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
             
             if ($conn->connect_error) {
@@ -50,7 +44,9 @@ function getDB() {
             
             $conn->set_charset("utf8mb4");
         } catch (Exception $e) {
-            die("Error koneksi database: " . $e->getMessage());
+            error_log($e->getMessage());
+            http_response_code(503);
+            exit('Database belum tersedia. Periksa konfigurasi dan layanan MySQL.');
         }
     }
     

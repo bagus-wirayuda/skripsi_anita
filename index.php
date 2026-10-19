@@ -1,15 +1,13 @@
+<?php require_once __DIR__.'/config/database.php'; ?>
 <!DOCTYPE html>
 <html lang="id">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>SDN 1 UNDUOLO - Profil Sekolah</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
-      integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+      href="assets/vendor/fontawesome/css/all.min.css"
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     />
@@ -106,11 +104,11 @@
             <dl>
               <div>
                 <dt>Jumlah Siswa</dt>
-                <dd>420 siswa aktif</dd>
+                <dd><?= (int)(fetchOne("SELECT COUNT(*) total FROM siswa WHERE status='aktif'")['total'] ?? 0) ?> siswa aktif</dd>
               </div>
               <div>
                 <dt>Jumlah Guru</dt>
-                <dd>35 pendidik profesional</dd>
+                <dd><?= (int)(fetchOne("SELECT COUNT(*) total FROM guru WHERE status='aktif'")['total'] ?? 0) ?> guru aktif</dd>
               </div>
               <div>
                 <dt>Program Unggulan</dt>
@@ -126,12 +124,12 @@
         <div class="profile-steps">
           <article class="card">
             <p class="card__title"><span>1.</span> Isi Formulir Online</p>
-            <p>Lengkapi data orang tua dan calon siswa melalui halaman pendaftaran.</p>
+            <p>Buat akun orang tua melalui formulir pendaftaran. Data anak diajukan setelah akun disetujui.</p>
             <a class="btn" href="register.php">Buka Formulir</a>
           </article>
           <article class="card">
             <p class="card__title"><span>2.</span> Serahkan Berkas</p>
-            <p>Bawa dokumen pendukung ke sekolah sesuai jadwal yang dikirim via email.</p>
+            <p>Hubungi sekolah untuk verifikasi data dan jadwal penyerahan dokumen pendukung.</p>
           </article>
           <article class="card">
             <p class="card__title"><span>3.</span> Aktivasi Akun</p>
@@ -143,7 +141,7 @@
 
     <footer class="profile-footer">
       <div class="profile-footer__content">
-        <p>&copy; 2025 SDN 1 UNDUOLO. Seluruh hak cipta dilindungi.</p>
+        <p>&copy; <?=date('Y')?> SDN 1 UNDUOLO. Seluruh hak cipta dilindungi.</p>
         <div class="profile-footer__links">
           <a href="register.php">Pendaftaran</a>
           <a href="presensi.php">Presensi</a>

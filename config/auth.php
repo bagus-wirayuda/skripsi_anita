@@ -4,7 +4,14 @@
  * SDN 1 UNDUOLO - Sistem Manajemen Sekolah
  */
 
-session_start();
+if (session_status() !== PHP_SESSION_ACTIVE) {
+    session_start(['cookie_httponly'=>true, 'cookie_samesite'=>'Lax', 'cookie_secure'=>!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off']);
+}
+$_SESSION['csrf'] ??= bin2hex(random_bytes(32));
+if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST' && !hash_equals($_SESSION['csrf'], (string)($_POST['csrf'] ?? ''))) {
+    http_response_code(419);
+    exit('Sesi formulir telah berakhir. Muat ulang halaman lalu coba kembali.');
+}
 
 require_once __DIR__ . '/database.php';
 
@@ -34,6 +41,19 @@ function checkRole($allowedRoles = []) {
  * Redirect jika belum login
  */
 function requireLogin() {
+    if (isLoggedIn()) {
+        $id = (int)$_SESSION['user_id'];
+        $u = fetchOne("SELECT * FROM users WHERE id=$id AND status='aktif'");
+        if (!$u || $u['role'] !== $_SESSION['role']) {
+            session_unset();
+        } else {
+            $_SESSION['nama_lengkap'] = $u['nama_lengkap'];
+            $role = $u['role'];
+            $related = $role === 'guru' ? fetchOne("SELECT id FROM guru WHERE user_id=$id AND status='aktif'") : ($role === 'orangtua' ? fetchOne("SELECT id FROM orangtua WHERE user_id=$id AND status='approved'") : null);
+            $_SESSION['related_id'] = $related['id'] ?? null;
+            if (in_array($role, ['guru','orangtua']) && !$related) session_unset();
+        }
+    }
     if (!isLoggedIn()) {
         header('Location: ' . BASE_URL . '/login.php');
         exit;
@@ -47,7 +67,8 @@ function requireRole($allowedRoles) {
     requireLogin();
     
     if (!checkRole($allowedRoles)) {
-        header('Location: ' . BASE_URL . '/login.php');
+        http_response_code(403);
+        echo 'Anda tidak memiliki akses ke halaman ini.';
         exit;
     }
 }
@@ -66,11 +87,15 @@ function login($username, $password) {
             FROM users u
             LEFT JOIN guru g ON u.id = g.user_id
             LEFT JOIN orangtua o ON u.id = o.user_id
-            WHERE u.username = '$username' AND u.status = 'aktif'";
+            WHERE (u.username = '$username' OR u.email = '$username') AND u.status = 'aktif'";
     
     $user = fetchOne($sql);
     
     if ($user && password_verify($password, $user['password'])) {
+        if ($user['role'] === 'guru' && !fetchOne('SELECT id FROM guru WHERE user_id='.(int)$user['id']." AND status='aktif'")) return false;
+        if ($user['role'] === 'orangtua' && !fetchOne('SELECT id FROM orangtua WHERE user_id='.(int)$user['id']." AND status='approved'")) return false;
+        session_regenerate_id(true);
+        $_SESSION['csrf'] = bin2hex(random_bytes(32));
         $_SESSION['user_id'] = $user['id'];
         $_SESSION['username'] = $user['username'];
         $_SESSION['role'] = $user['role'];

@@ -1,0 +1,7 @@
+<?php
+require __DIR__.'/includes/ui.php';requireRole(['admin','guru','orangtua']);
+try{$s=student((int)($_GET['siswa_id']??0));need($s['status']==='aktif','Kartu QR hanya tersedia untuk siswa aktif.');}catch(Throwable $ex){http_response_code(403);pageStart('Kartu QR');echo '<p class="card">'.e(actionError($ex)).'</p>';pageEnd();exit;}
+dbRun('INSERT IGNORE INTO qr_tokens (siswa_id,token) VALUES (?,?)',[$s['id'],bin2hex(random_bytes(32))]);
+$token=dbOne('SELECT token FROM qr_tokens WHERE siswa_id=?',[$s['id']])['token'];
+pageStart('Kartu Presensi Siswa','Tunjukkan kartu ini kepada petugas presensi sekolah.');
+?><div class="form-actions"><button class="btn" data-print>Cetak Kartu / Simpan PDF</button></div><article class="card qr-card"><img src="<?=BASE_URL?>/assets/img/logo.png" alt="Logo sekolah" width="60"><h2>SDN 1 UNDUOLO</h2><p>Kartu Presensi Siswa</p><div id="studentQr" data-token="<?=e('ANITA:'.$token)?>"></div><h3><?=e($s['nama_lengkap'])?></h3><p>NIS <?=e($s['nis'])?> · Kelas <?=e($s['nama_kelas'])?></p><small>Kartu pribadi siswa. Simpan dengan baik.</small><noscript>Aktifkan JavaScript untuk menampilkan QR.</noscript></article><script src="<?=BASE_URL?>/assets/vendor/qrcode.min.js"></script><script>new QRCode(document.getElementById('studentQr'),{text:document.getElementById('studentQr').dataset.token,width:240,height:240,correctLevel:QRCode.CorrectLevel.M});</script><?php pageEnd();

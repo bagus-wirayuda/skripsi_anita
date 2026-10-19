@@ -4,12 +4,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>SDN 1 UNDUOLO - Registrasi Berhasil</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
-      integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+      href="assets/vendor/fontawesome/css/all.min.css"
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     />
@@ -23,9 +20,9 @@
         </div>
         <h1>Pendaftaran Berhasil Dikirim</h1>
         <p>
-          Terima kasih telah mendaftarkan calon siswa SDN 1 UNDUOLO. Silakan bawa dokumen pendukung
-          di bawah ini ke sekolah untuk proses verifikasi. Admin akan membuatkan akun orang tua
-          setelah berkas diterima.
+          Akun orang tua Anda sudah didaftarkan dan menunggu persetujuan admin.
+          Setelah disetujui, masuk menggunakan username dan password yang Anda buat,
+          lalu ajukan data anak melalui menu Data Anak.
         </p>
 
         <section>
@@ -44,9 +41,9 @@
             <i class="fa-solid fa-house"></i>
             <span>Kembali ke Profil Sekolah</span>
           </a>
-          <a class="btn btn--ghost" href="presensi.php">
+          <a class="btn btn--ghost" href="login.php">
             <i class="fa-solid fa-qrcode"></i>
-            <span>Lihat Presensi</span>
+            <span>Masuk ke Akun</span>
           </a>
         </div>
 

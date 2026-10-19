@@ -108,6 +108,7 @@ CREATE TABLE IF NOT EXISTS absensi_siswa (
     tanggal DATE NOT NULL,
     status ENUM('hadir', 'izin', 'sakit', 'alpa') NOT NULL,
     jam_masuk TIME NULL,
+    jam_keluar TIME NULL,
     keterangan TEXT,
     guru_id INT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -200,11 +201,11 @@ CREATE TABLE IF NOT EXISTS notes (
 
 -- Insert default admin user (password: admin123)
 INSERT INTO users (username, password, email, role, nama_lengkap, status) VALUES
-('admin', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'admin@sdn1unduolo.sch.id', 'admin', 'Admin Sekolah', 'aktif');
+('admin', '$2y$12$k48LhR.tVixrmGAZO4QFBOoGL1pVjt1D7pQLXB.xlwJXCGBiTGUNG', 'admin@sdn1unduolo.sch.id', 'admin', 'Admin Sekolah', 'aktif');
 
 -- Insert default kepala sekolah user (password: kepala123)
 INSERT INTO users (username, password, email, role, nama_lengkap, status) VALUES
-('kepalasekolah', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'kepala@sdn1unduolo.sch.id', 'kepalasekolah', 'Kepala Sekolah', 'aktif');
+('kepalasekolah', '$2y$12$XivMns2lwTsB7jZ2MJCKmee0cdlC9Z1PHi9VBsqA7J/fKTTc/oPyG', 'kepala@sdn1unduolo.sch.id', 'kepalasekolah', 'Kepala Sekolah', 'aktif');
 
 -- Insert Mata Pelajaran
 INSERT INTO mata_pelajaran (nama, kode) VALUES
@@ -236,3 +237,30 @@ INSERT INTO kelas (nama_kelas, tingkat, tahun_ajaran) VALUES
 ('6C', 6, '2024/2025');
 
 
+
+-- Additional workflows (also available as an additive migration).
+CREATE TABLE IF NOT EXISTS qr_tokens (
+ siswa_id INT PRIMARY KEY, token CHAR(64) NOT NULL UNIQUE,
+ created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+ FOREIGN KEY (siswa_id) REFERENCES siswa(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+CREATE TABLE IF NOT EXISTS pendaftaran_anak (
+ id INT AUTO_INCREMENT PRIMARY KEY, orangtua_id INT NOT NULL,
+ nama_lengkap VARCHAR(100) NOT NULL, nisn VARCHAR(20),
+ jenis_kelamin ENUM('Laki-laki','Perempuan') NOT NULL,
+ tempat_lahir VARCHAR(100), tanggal_lahir DATE NOT NULL,
+ kelas_id INT NOT NULL, status ENUM('pending','approved','rejected') DEFAULT 'pending',
+ catatan TEXT, siswa_id INT NULL, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+ FOREIGN KEY (orangtua_id) REFERENCES orangtua(id) ON DELETE CASCADE,
+ FOREIGN KEY (kelas_id) REFERENCES kelas(id) ON DELETE RESTRICT,
+ FOREIGN KEY (siswa_id) REFERENCES siswa(id) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+CREATE TABLE IF NOT EXISTS notification_queue (
+ id INT AUTO_INCREMENT PRIMARY KEY, siswa_id INT NOT NULL, tanggal DATE NOT NULL,
+ nomor_hp VARCHAR(20) NOT NULL, pesan TEXT NOT NULL,
+ status ENUM('pending','sent','failed','cancelled') DEFAULT 'pending',
+ attempts INT NOT NULL DEFAULT 0, last_error TEXT NULL, provider_message_id VARCHAR(200) NULL,
+ created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, sent_at DATETIME NULL,
+ UNIQUE KEY unique_absence_notice (siswa_id,tanggal),
+ FOREIGN KEY (siswa_id) REFERENCES siswa(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

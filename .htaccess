@@ -1,0 +1,8 @@
+Options -Indexes
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteRule ^(?:\.git|\.codex|\.agents|config|includes|migrations|scripts|tests|tmp|storage|services)(?:/|$) - [F,L]
+</IfModule>
+<FilesMatch "(?i)\.(sql|md|log|ini|env|py|cjs)$">
+Require all denied
+</FilesMatch>

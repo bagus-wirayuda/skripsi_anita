@@ -1,30 +1,19 @@
 <?php
-require_once 'config/auth.php';
-
-$success = false;
-$error = '';
-
-// Proses pendaftaran
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['nama']) && isset($_POST['alamat']) && isset($_POST['nomor_hp'])) {
-    $nama = escape($_POST['nama']);
-    $alamat = escape($_POST['alamat']);
-    $nomor_hp = escape($_POST['nomor_hp']);
-    
-    if (empty($nama) || empty($alamat) || empty($nomor_hp)) {
-        $error = 'Semua field harus diisi!';
-    } else {
-        // Insert ke tabel orangtua
-        $sql = "INSERT INTO orangtua (nama, alamat, nomor_hp, status) 
-                VALUES ('$nama', '$alamat', '$nomor_hp', 'pending')";
-        
-        if (query($sql)) {
-            $success = true;
-            header('Location: register-success.php');
-            exit;
-        } else {
-            $error = 'Terjadi kesalahan saat menyimpan data. Silakan coba lagi.';
-        }
-    }
+require_once __DIR__.'/config/app.php';
+$error='';
+if ($_SERVER['REQUEST_METHOD']==='POST') {
+ try {
+  $nama=textInput('nama',100); $alamat=textInput('alamat',1000); $hp=textInput('nomor_hp',20);
+  need((bool)preg_match('/^(?:0|62|\+62)[0-9]{8,14}$/',$hp),'Nomor HP harus berupa nomor Indonesia yang valid tanpa spasi.');
+  $username=textInput('username',50); $password=textInput('password',100);
+  need((bool)preg_match('/^[a-zA-Z0-9_.-]{3,50}$/',$username),'Username minimal 3 karakter, hanya huruf, angka, titik, garis bawah atau tanda hubung.');
+  need(strlen($password)>=8,'Password minimal 8 karakter.');
+  getDB()->begin_transaction();
+  dbRun("INSERT INTO users (username,password,role,nama_lengkap,status) VALUES (?,?,'orangtua',?,'nonaktif')",[$username,hashPassword($password),$nama]);
+  $uid=lastInsertId();
+  dbRun("INSERT INTO orangtua (nama,alamat,nomor_hp,user_id,status) VALUES (?,?,?,?,'pending')",[$nama,$alamat,$hp,$uid]);
+  getDB()->commit(); header('Location: register-success.php'); exit;
+ } catch(Throwable $ex) { getDB()->rollback(); $error=actionError($ex); }
 }
 ?>
 <!DOCTYPE html>
@@ -33,12 +22,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['nama']) && isset($_PO
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>SDN 1 UNDUOLO - Pendaftaran Orang Tua</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
-      integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+      href="assets/vendor/fontawesome/css/all.min.css"
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     />
@@ -72,7 +58,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['nama']) && isset($_PO
           </div>
         <?php endif; ?>
 
-        <form id="registerForm" class="register-form" method="POST" action="">
+        <form id="registerForm" class="register-form" method="POST" action=""><?=csrfField()?>
+<div class="form-group"><label for="username">Username akun</label><input id="username" name="username" required minlength="3" maxlength="50" autocomplete="username" value="<?=e($_POST['username']??'')?>"></div>
+<div class="form-group"><label for="password">Password (minimal 8 karakter)</label><input id="password" name="password" type="password" required minlength="8" autocomplete="new-password"></div>
           <label class="form-group">
             <span><i class="fa-solid fa-user"></i> Nama Lengkap Orang Tua / Wali</span>
             <input type="text" name="nama" placeholder="Contoh: Bapak Andi Saputra" required value="<?php echo isset($_POST['nama']) ? htmlspecialchars($_POST['nama']) : ''; ?>" />
@@ -88,7 +76,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['nama']) && isset($_PO
           </label>
           <label class="form-group">
             <span><i class="fa-solid fa-phone"></i> Nomor HP Aktif</span>
-            <input type="tel" name="nomor_hp" placeholder="Contoh: 0812-XXXX-XXXX" required value="<?php echo isset($_POST['nomor_hp']) ? htmlspecialchars($_POST['nomor_hp']) : ''; ?>" />
+            <input type="tel" name="nomor_hp" placeholder="Contoh: 081234567890" required value="<?php echo isset($_POST['nomor_hp']) ? htmlspecialchars($_POST['nomor_hp']) : ''; ?>" />
           </label>
 
           <button class="btn" type="submit" data-success-url="register-success.php">
@@ -98,10 +86,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['nama']) && isset($_PO
         </form>
 
         <footer class="register-footer">
-          <p>
-            Butuh bantuan? Hubungi admin sekolah melalui WhatsApp
-            <strong>0851-1234-5678</strong> (Jam layanan 08.00–15.00 WITA).
-          </p>
+          <p>Butuh bantuan? Hubungi tata usaha sekolah untuk verifikasi akun dan informasi pendaftaran.</p>
         </footer>
       </article>
     </main>

@@ -14,12 +14,13 @@ $role = $_SESSION['role'] ?? '';
 $user = getCurrentUser();
 ?>
 
-<aside class="sidebar">
+<button class="menu-toggle btn" id="menuToggle" aria-controls="navigation" aria-expanded="false">☰ Menu Sekolah</button>
+<aside class="sidebar" id="navigation">
   <div class="sidebar__brand">
     <img src="<?php echo BASE_URL; ?>/assets/img/logo.png" alt="Logo SDN 1 UNDUOLO" width="40" height="40" />
     <span>SDN 1 UNDUOLO</span>
   </div>
-  <nav class="sidebar__nav">
+  <nav class="sidebar__nav" aria-label="Navigasi utama">
     <?php if ($role === 'admin'): ?>
       <a class="sidebar__link <?php echo $currentPage === 'dashboard' ? 'is-active' : ''; ?>" href="<?php echo BASE_URL; ?>/admin/dashboard.php" data-nav="admin-dashboard">
         <i class="fa-solid fa-chart-line"></i>
@@ -126,11 +127,26 @@ $user = getCurrentUser();
       </a>
     <?php endif; ?>
     
+<?php if ($role === 'admin'): ?>
+<a class="sidebar__link <?= $currentPage === 'data-orangtua' ? 'is-active' : '' ?>" href="<?=BASE_URL?>/admin/data-orangtua.php"><i class="fa-solid fa-users" aria-hidden="true"></i><span>Data Orang Tua</span></a>
+      <a class="sidebar__link <?= $currentPage === 'pendaftaran' ? 'is-active' : '' ?>" href="<?=BASE_URL?>/admin/pendaftaran.php"><i class="fa-solid fa-user-check" aria-hidden="true"></i><span>Validasi Pendaftaran</span></a>
+      <a class="sidebar__link <?= $currentPage === 'data-kelas' ? 'is-active' : '' ?>" href="<?=BASE_URL?>/admin/data-kelas.php"><i class="fa-solid fa-school" aria-hidden="true"></i><span>Data Kelas</span></a>
+      <a class="sidebar__link <?= $currentPage === 'mata-pelajaran' ? 'is-active' : '' ?>" href="<?=BASE_URL?>/admin/mata-pelajaran.php"><i class="fa-solid fa-book" aria-hidden="true"></i><span>Mata Pelajaran</span></a>
+      <a class="sidebar__link <?= $currentPage === 'absensi-guru' ? 'is-active' : '' ?>" href="<?=BASE_URL?>/admin/absensi-guru.php"><i class="fa-solid fa-clipboard-check" aria-hidden="true"></i><span>Absensi Guru</span></a>
+      <a class="sidebar__link <?= $currentPage === 'notifikasi' ? 'is-active' : '' ?>" href="<?=BASE_URL?>/admin/notifikasi.php"><i class="fa-solid fa-bell" aria-hidden="true"></i><span>Antrean Notifikasi</span></a>
+<?php endif; ?>
+<?php if ($role === 'guru'): ?>
+      <a class="sidebar__link <?= $currentPage === 'jadwal' ? 'is-active' : '' ?>" href="<?=BASE_URL?>/guru/jadwal.php"><i class="fa-solid fa-calendar-days" aria-hidden="true"></i><span>Kelas Saya</span></a>
+      <a class="sidebar__link <?= $currentPage === 'perwalian' ? 'is-active' : '' ?>" href="<?=BASE_URL?>/guru/perwalian.php"><i class="fa-solid fa-users" aria-hidden="true"></i><span>Perwalian</span></a>
+<?php endif; ?>
+<?php if ($role === 'orangtua'): ?>
+      <a class="sidebar__link <?= $currentPage === 'penilaian-harian' ? 'is-active' : '' ?>" href="<?=BASE_URL?>/orangtua/penilaian-harian.php"><i class="fa-solid fa-star" aria-hidden="true"></i><span>Penilaian Harian</span></a>
+<?php endif; ?>
     <div style="margin-top: auto; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1);">
-      <a class="sidebar__link" href="<?php echo BASE_URL; ?>/logout.php" style="color: #fff;">
+      <form method="post" action="<?php echo BASE_URL; ?>/logout.php"><input type="hidden" name="csrf" value="<?=htmlspecialchars($_SESSION['csrf'])?>"><button class="sidebar__link sidebar-logout" type="submit">
         <i class="fa-solid fa-sign-out-alt"></i>
         <span>Logout</span>
-      </a>
+      </button></form>
     </div>
   </nav>
 </aside>

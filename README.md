@@ -42,10 +42,10 @@ Sistem informasi manajemen sekolah yang komprehensif untuk mengelola data siswa,
 
 ## Persyaratan Sistem
 
-- PHP 7.4 atau lebih tinggi
+- PHP 8.1 atau lebih tinggi
 - MySQL 5.7 atau lebih tinggi (atau MariaDB 10.2+)
 - Web Server (Apache/Nginx)
-- Extension PHP: mysqli, pdo_mysql
+- Extension PHP: mysqli, mbstring, zip (untuk XLSX)
 
 ## Instalasi
 
@@ -73,7 +73,7 @@ Atau jalankan file `database.sql` melalui phpMyAdmin.
 
 ### 3. Konfigurasi Database
 
-Edit file `config/database.php` sesuai dengan konfigurasi database Anda:
+Salin `config/local.example.php` menjadi `config/local.php` dan sesuaikan konfigurasi:
 
 ```php
 define('DB_HOST', 'localhost');
@@ -129,7 +129,7 @@ Database terdiri dari tabel-tabel berikut:
 
 1. Login dengan akun admin
 2. Masuk ke menu "Data Siswa" untuk menambah/mengelola siswa
-3. Masuk ke menu "Data Guru" untuk menambah/mengelola guru
+3. Buat akun guru di Data User lalu hubungkan akun tersebut melalui Data Guru
 4. Masuk ke menu "Data User" untuk membuat akun user baru
 5. Setelah data guru dan siswa ada, bisa setting jadwal di menu "Jadwal Pelajaran"
 
@@ -221,20 +221,31 @@ $name = escape($_POST['name']);
 - Cek BASE_URL di `config/database.php`
 - Pastikan web server configured dengan benar
 
-## Todo / Development Roadmap
+## Pembaruan hasil audit
 
-- [x] Database structure
-- [x] Authentication system
-- [x] Admin dashboard
-- [x] Admin data siswa
-- [x] Guru presensi
-- [x] Orangtua dashboard
-- [ ] CRUD lengkap untuk semua modul
-- [ ] Export laporan ke PDF/Excel
-- [ ] Notifikasi sistem
-- [ ] Upload foto profil
-- [ ] QR Code generator untuk presensi
-- [ ] Mobile responsive improvements
+Semua halaman modul sekarang menggunakan data database, bukan data contoh.
+CRUD referensi, validasi pendaftaran, data anak, presensi masuk/pulang QR/manual,
+nilai, penilaian harian, catatan, laporan/filter/XLSX dan tampilan responsif tersedia.
+Pengiriman WhatsApp ditangguhkan; antrean dan kontrak integrasi sudah disiapkan.
+
+**Untuk database yang sudah ada, jangan impor ulang database.sql.** Jalankan:
+
+```powershell
+php scripts/migrate.php
+```
+
+Migrasi aman dijalankan ulang dan mempertahankan data/password lama. Database lokal
+pada pengerjaan ini telah dimigrasi. Untuk instalasi baru, import database.sql.
+Akun bawaan pada SQL baru memakai password sesuai bagian kredensial di atas.
+
+Konfigurasi lokal dapat ditaruh di `config/local.php` berdasarkan
+`config/local.example.php`, atau environment DB_HOST/DB_USER/DB_PASS/DB_NAME.
+
+Panduan lengkap dan hasil audit: [docs/AUDIT_DAN_PENGGUNAAN.md](docs/AUDIT_DAN_PENGGUNAAN.md).
+Petunjuk integrasi WhatsApp berikutnya: [docs/WHATSAPP_INTEGRATION.md](docs/WHATSAPP_INTEGRATION.md).
+
+Ekspor Excel menghasilkan file .xlsx sebenarnya. Untuk PDF, pilih Cetak / Simpan PDF,
+lalu pilih Save as PDF pada dialog cetak browser. Kamera di ponsel memerlukan HTTPS.
 
 ## Kontribusi
 
